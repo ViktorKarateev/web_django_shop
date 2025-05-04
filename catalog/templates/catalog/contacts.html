@@ -18,8 +18,26 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="text-success">Контактная информация</h1>
-    <p class="fw-bold">Email: info@example.com</p>
+    <h1 class="text-success">Связаться с нами</h1>
+
+    {% if success %}
+        <div class="alert alert-success" role="alert">
+            Спасибо за сообщение! Мы свяжемся с вами в ближайшее время.
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Ваше имя</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="message" class="form-label">Сообщение</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
 </div>
 
 <footer class="bg-light text-center text-muted py-3 mt-5">
