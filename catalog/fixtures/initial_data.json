@@ -1,0 +1,44 @@
+[
+{
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+        "name": "Одежда",
+        "description": "Всё для тела"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+        "name": "Техника",
+        "description": "Электроника и гаджеты"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "name": "Футболка",
+        "description": "Футболка с принтом",
+        "image": "",
+        "category": 3,
+        "price": "1190.00",
+        "created_at": "2025-05-11T18:35:45.050Z",
+        "updated_at": "2025-05-11T18:35:45.050Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+        "name": "Смартфон",
+        "description": "Смартфон с хорошей камерой",
+        "image": "",
+        "category": 4,
+        "price": "34990.00",
+        "created_at": "2025-05-11T18:35:45.051Z",
+        "updated_at": "2025-05-11T18:35:45.051Z"
+    }
+}
+]
