@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ product.name }}</title>
-</head>
-<body>
-    {% extends 'catalog/base.html' %}
+{% extends 'catalog/base.html' %}
 
-    {% block content %}
-    <h1>{{ product.name }}</h1>
-    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
-    <p><strong>Описание:</strong> {{ product.description }}</p>
-    <p><strong>Цена:</strong> {{ product.price }} ₽</p>
-    <a href="{% url 'catalog:home' %}">← Назад к товарам</a>
-    {% endblock %}
-</body>
-</html>
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-primary">{{ product.name }}</h1>
+
+<div class="card mb-4">
+  {% if product.image %}
+    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+  {% endif %}
+  <div class="card-body">
+    <p class="card-text">{{ product.description }}</p>
+    <p class="card-text"><strong>Цена:</strong> {{ product.price }} ₽</p>
+    <a href="{% url 'catalog:home' %}" class="btn btn-secondary">← Назад</a>
+  </div>
+</div>
+{% endblock %}
