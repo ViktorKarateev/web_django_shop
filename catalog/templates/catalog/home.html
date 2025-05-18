@@ -1,30 +1,57 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Главная</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+{% extends 'catalog/base.html' %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="/">Магазин</a>
-    <div class="navbar-nav">
-      <a class="nav-link active" href="/">Главная</a>
-      <a class="nav-link" href="/contacts/">Контакты</a>
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h1 class="text-primary mb-4">Список товаров</h1>
+
+<div class="row">
+  {% for product in page_obj %}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'catalog:product_detail' product.pk %}">{{ product.name }}</a>
+          </h5>
+          <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+          <p class="card-text"><strong>Цена:</strong> {{ product.price }} ₽</p>
+        </div>
+      </div>
     </div>
-  </div>
-</nav>
-
-<div class="container mt-5">
-    <h1 class="text-primary">Добро пожаловать в наш магазин!</h1>
-    <p class="lead">Это главная страница.</p>
+  {% empty %}
+    <p>Нет доступных товаров.</p>
+  {% endfor %}
 </div>
 
-<footer class="bg-light text-center text-muted py-3 mt-5">
-    &copy; 2025 Магазин на Django
-</footer>
+<!-- Пагинация -->
+<nav aria-label="Навигация по страницам">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Назад</span>
+      </li>
+    {% endif %}
 
-</body>
-</html>
+    <li class="page-item disabled">
+      <span class="page-link">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link">Вперёд</span>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

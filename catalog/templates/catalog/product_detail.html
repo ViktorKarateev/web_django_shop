@@ -1,0 +1,18 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-primary">{{ product.name }}</h1>
+
+<div class="card mb-4">
+  {% if product.image %}
+    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+  {% endif %}
+  <div class="card-body">
+    <p class="card-text">{{ product.description }}</p>
+    <p class="card-text"><strong>Цена:</strong> {{ product.price }} ₽</p>
+    <a href="{% url 'catalog:home' %}" class="btn btn-secondary">← Назад</a>
+  </div>
+</div>
+{% endblock %}
