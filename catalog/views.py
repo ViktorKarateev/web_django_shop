@@ -1,11 +1,17 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 from .models import Product
 from .forms import ProductForm
 
 def home(request):
-    products = Product.objects.all()
-    return render(request, 'catalog/home.html', {'products': products})
+    product_list = Product.objects.all()
+    paginator = Paginator(product_list, 6)  # 6 товаров на страницу
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'catalog/home.html', {'page_obj': page_obj})
 
 def contacts(request):
     success = False
