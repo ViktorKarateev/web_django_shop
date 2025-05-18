@@ -18,12 +18,30 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="text-primary">Добро пожаловать в наш магазин!</h1>
-    <p class="lead">Это главная страница.</p>
+  <h1 class="text-primary mb-4">Список товаров</h1>
+
+  <div class="row">
+    {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{% url 'catalog:product_detail' product.pk %}">{{ product.name }}</a>
+            </h5>
+            <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+            <p class="card-text"><strong>Цена:</strong> {{ product.price }} ₽</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>Нет доступных товаров.</p>
+    {% endfor %}
+  </div>
 </div>
 
 <footer class="bg-light text-center text-muted py-3 mt-5">
-    &copy; 2025 Магазин на Django
+  &copy; 2025 Магазин на Django
 </footer>
 
 </body>

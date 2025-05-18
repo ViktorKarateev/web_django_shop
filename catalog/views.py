@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404
 from .models import Product
 
 def home(request):
-    return render(request, 'catalog/home.html')
+    products = Product.objects.all()
+    return render(request, 'catalog/home.html', {'products': products})
 
 def contacts(request):
     success = False
