@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import BlogPost
+from django.urls import reverse
 
 
 class BlogListView(ListView):
@@ -8,11 +9,20 @@ class BlogListView(ListView):
     template_name = 'blog/blog_list.html'
     context_object_name = 'posts'
 
+    def get_queryset(self):
+        return BlogPost.objects.filter(is_published=True).order_by('-created_at')
+
 
 class BlogDetailView(DetailView):
     model = BlogPost
     template_name = 'blog/blog_detail.html'
     context_object_name = 'post'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        obj.views_count += 1
+        obj.save(update_fields=['views_count'])
+        return obj
 
 
 class BlogCreateView(CreateView):
@@ -28,7 +38,8 @@ class BlogUpdateView(UpdateView):
     template_name = 'blog/blog_form.html'
 
     def get_success_url(self):
-        return self.object.get_absolute_url()  # временно — до доработки
+        return reverse('blog:blog_detail', kwargs={'pk': self.object.pk})
+
 
 
 class BlogDeleteView(DeleteView):
