@@ -3,16 +3,22 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-<h1 class="text-primary">{{ product.name }}</h1>
+<h1 class="text-primary mb-4">{{ product.name }}</h1>
 
 <div class="card mb-4">
   {% if product.image %}
     <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
   {% endif %}
+
   <div class="card-body">
     <p class="card-text">{{ product.description }}</p>
     <p class="card-text"><strong>Цена:</strong> {{ product.price }} ₽</p>
-    <a href="{% url 'catalog:home' %}" class="btn btn-secondary">← Назад</a>
+    <p class="card-text"><strong>Категория:</strong> {{ product.category.name }}</p>
+    <p class="card-text"><strong>Дата создания:</strong> {{ product.created_at|date:"d.m.Y H:i" }}</p>
+    <p class="card-text"><strong>Дата изменения:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</p>
+    <a href="{% url 'catalog:home' %}" class="btn btn-secondary mt-3">← Назад</a>
   </div>
 </div>
+
 {% endblock %}
+
