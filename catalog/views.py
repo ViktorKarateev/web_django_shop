@@ -1,39 +1,19 @@
-from django.shortcuts import render, redirect
-from django.shortcuts import get_object_or_404
-from django.core.paginator import Paginator
+from django.views.generic import ListView, DetailView, TemplateView
 from .models import Product
-from .forms import ProductForm
 
-def home(request):
-    product_list = Product.objects.all()
-    paginator = Paginator(product_list, 6)  # 6 товаров на страницу
 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+class ProductListView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'page_obj'
+    paginate_by = 6
 
-    return render(request, 'catalog/home.html', {'page_obj': page_obj})
 
-def contacts(request):
-    success = False
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
 
-    if request.method == "POST":
-        name = request.POST.get("name")
-        message = request.POST.get("message")
-        print(f"[ОБРАТНАЯ СВЯЗЬ] Имя: {name}, Сообщение: {message}")
-        success = True
 
-    return render(request, 'catalog/contacts.html', {'success': success})
-
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, 'catalog/product_detail.html', {'product': product})
-
-def add_product_view(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('catalog:home')  # перенаправим на главную
-    else:
-        form = ProductForm()
-    return render(request, 'catalog/add_product.html', {'form': form})
+class ContactsView(TemplateView):
+    template_name = 'catalog/contacts.html'
