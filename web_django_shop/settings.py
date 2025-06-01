@@ -25,6 +25,9 @@ INSTALLED_APPS = [
     'users',
 ]
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,7 +58,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'web_django_shop.wsgi.application'
 
-# ✅ Подключение к PostgreSQL через .env
+#  Подключение к PostgreSQL через .env
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
