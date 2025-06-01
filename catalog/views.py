@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product
 from .forms import ProductForm
+from django.contrib.auth.decorators import login_required
 
 class ProductListView(ListView):
     model = Product
@@ -18,6 +19,7 @@ class ProductDetailView(DetailView):
 class ContactsView(TemplateView):
     template_name = 'catalog/contacts.html'
 
+@login_required
 def update_product_view(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -29,6 +31,7 @@ def update_product_view(request, pk):
         form = ProductForm(instance=product)
     return render(request, 'catalog/product_update.html', {'form': form, 'product': product})
 
+@login_required
 def delete_product_view(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
