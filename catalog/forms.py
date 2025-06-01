@@ -33,3 +33,11 @@ class ProductForm(forms.ModelForm):
         if price < 0:
             raise forms.ValidationError("Цена не может быть отрицательной.")
         return price
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            css_class = 'form-control'
+            if isinstance(field.widget, forms.CheckboxInput):
+                css_class = 'form-check-input'
+            field.widget.attrs['class'] = css_class
