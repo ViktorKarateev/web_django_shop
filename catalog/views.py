@@ -28,3 +28,10 @@ def update_product_view(request, pk):
     else:
         form = ProductForm(instance=product)
     return render(request, 'catalog/product_update.html', {'form': form, 'product': product})
+
+def delete_product_view(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('catalog:home')
+    return render(request, 'catalog/product_confirm_delete.html', {'product': product})
