@@ -41,3 +41,17 @@ class ProductForm(forms.ModelForm):
             if isinstance(field.widget, forms.CheckboxInput):
                 css_class = 'form-check-input'
             field.widget.attrs['class'] = css_class
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            # Проверка размера
+            if image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError("Размер изображения не должен превышать 5 МБ.")
+
+            # Проверка расширения
+            valid_mime_types = ['image/jpeg', 'image/png']
+            if image.content_type not in valid_mime_types:
+                raise forms.ValidationError("Допустимы только форматы JPEG и PNG.")
+        return image
+
