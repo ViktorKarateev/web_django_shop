@@ -1,12 +1,11 @@
 from django.urls import path
-from . import views
-from .apps import CatalogConfig  # добавляем имя приложения
+from .views import ProductListView, ProductDetailView, ContactsView
 
-app_name = CatalogConfig.name  # устанавливаем пространство имён
+app_name = 'catalog'
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('contacts/', views.contacts, name='contacts'),
-    path('product/<int:pk>/', views.product_detail, name='product_detail'),
-    path('add/', views.add_product_view, name='add_product'),
+    path('', ProductListView.as_view(), name='home'),
+    path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
+    path('contacts/', ContactsView.as_view(), name='contacts'),
 ]
+
