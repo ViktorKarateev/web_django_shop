@@ -1,6 +1,11 @@
 from django import forms
 from .models import Product
 
+FORBIDDEN_WORDS = [
+    "казино", "криптовалюта", "крипта", "биржа",
+    "дешево", "бесплатно", "обман", "полиция", "радар"
+]
+
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
@@ -8,3 +13,45 @@ class ProductForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
         }
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].lower()
+        for word in FORBIDDEN_WORDS:
+            if word in name:
+                raise forms.ValidationError(f"Слово «{word}» запрещено в названии.")
+        return self.cleaned_data['name']
+
+    def clean_description(self):
+        description = self.cleaned_data['description'].lower()
+        for word in FORBIDDEN_WORDS:
+            if word in description:
+                raise forms.ValidationError(f"Слово «{word}» запрещено в описании.")
+        return self.cleaned_data['description']
+
+    def clean_price(self):
+        price = self.cleaned_data['price']
+        if price < 0:
+            raise forms.ValidationError("Цена не может быть отрицательной.")
+        return price
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            css_class = 'form-control'
+            if isinstance(field.widget, forms.CheckboxInput):
+                css_class = 'form-check-input'
+            field.widget.attrs['class'] = css_class
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            # Проверка размера
+            if image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError("Размер изображения не должен превышать 5 МБ.")
+
+            # Проверка расширения
+            valid_mime_types = ['image/jpeg', 'image/png']
+            if image.content_type not in valid_mime_types:
+                raise forms.ValidationError("Допустимы только форматы JPEG и PNG.")
+        return image
+
