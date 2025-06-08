@@ -20,6 +20,15 @@ class ProductListView(ListView):
     context_object_name = 'page_obj'
     paginate_by = 6
 
+    def get_queryset(self):
+        page = self.request.GET.get("page", 1)
+        key = f"product_list_page_{page}"
+        products = cache.get(key)
+        if not products:
+            products = super().get_queryset()
+            cache.set(key, products, timeout=60 * 5)  # кеш на 5 минут
+        return products
+
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'catalog/product_detail.html'
