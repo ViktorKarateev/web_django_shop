@@ -6,6 +6,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import View
 from django.shortcuts import redirect, get_object_or_404
 from django.core.cache import cache
+from django.views.generic import ListView
+from .services import get_products_by_category
+from .models import Product
 
 from .models import Product
 from .forms import ProductForm
@@ -87,3 +90,11 @@ class UnpublishProductView(LoginRequiredMixin, PermissionRequiredMixin, View):
         product.is_published = False
         product.save()
         return redirect('catalog:product_detail', pk=pk)
+
+class CategoryProductListView(ListView):
+    template_name = 'catalog/category_products.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('category_id')
+        return get_products_by_category(category_id)
