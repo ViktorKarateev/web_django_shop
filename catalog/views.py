@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import View
 from django.shortcuts import redirect, get_object_or_404
-
+from django.core.cache import cache
 
 from .models import Product
 from .forms import ProductForm
@@ -22,6 +22,18 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     template_name = 'catalog/product_detail.html'
     context_object_name = 'product'
     login_url = 'users:login'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs['pk']
+        key = f"product_detail_{pk}"
+
+        product = cache.get(key)
+        if not product:
+            product = super().get_object(queryset)
+            cache.set(key, product, 60 * 5)  # кеш на 5 минут
+
+        return product
+
 
 
 class ContactsView(TemplateView):
