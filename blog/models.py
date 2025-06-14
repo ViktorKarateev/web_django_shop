@@ -10,6 +10,9 @@ class BlogPost(models.Model):
     views_count = models.PositiveIntegerField(default=0, verbose_name='Просмотры')
 
     class Meta:
+        permissions = [
+            ('can_manage_blog', 'Может управлять блогом'),
+        ]
         verbose_name = 'Блоговая запись'
         verbose_name_plural = 'Блоговые записи'
 
